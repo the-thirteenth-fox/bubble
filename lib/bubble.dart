@@ -457,7 +457,7 @@ class BubblePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color
-      ..shader
+      ..shader = shader
       ..style = PaintingStyle.fill;
 
     if (elevation != 0.0) {
