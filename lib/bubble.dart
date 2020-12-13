@@ -65,6 +65,7 @@ class BubbleStyle {
     this.nipRadius,
     this.stick,
     this.color,
+    this.shader,
     this.elevation,
     this.shadowColor,
     this.padding,
@@ -82,6 +83,7 @@ class BubbleStyle {
   final double nipRadius;
   final bool stick;
   final Color color;
+  final Shader shader;
   final double elevation;
   final Color shadowColor;
   final BubbleEdges padding;
@@ -364,6 +366,7 @@ class Bubble extends StatelessWidget {
     double nipRadius,
     bool stick,
     Color color,
+    this.shader,
     double elevation,
     Color shadowColor,
     BubbleEdges padding,
@@ -402,6 +405,7 @@ class Bubble extends StatelessWidget {
 
   final Widget child;
   final Color color;
+  final Shader shader;
   final double elevation;
   final Color shadowColor;
   final BubbleEdges margin;
@@ -418,6 +422,7 @@ class Bubble extends StatelessWidget {
         painter: BubblePainter(
           clipper: bubbleClipper,
           color: color,
+          shader: shader,
           elevation: elevation,
           shadowColor: shadowColor,
           borderColor: borderColor,
@@ -432,6 +437,7 @@ class Bubble extends StatelessWidget {
 class BubblePainter extends CustomPainter {
   final CustomClipper<Path> clipper;
   final Color color;
+  final Shader shader;
   final double elevation;
   final Color shadowColor;
   final Color borderColor;
@@ -440,6 +446,7 @@ class BubblePainter extends CustomPainter {
   BubblePainter({
     this.clipper,
     this.color,
+    this.shader,
     this.elevation,
     this.shadowColor,
     this.borderColor,
@@ -450,6 +457,7 @@ class BubblePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color
+      ..shader
       ..style = PaintingStyle.fill;
 
     if (elevation != 0.0) {
