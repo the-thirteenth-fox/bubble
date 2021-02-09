@@ -14,6 +14,8 @@ enum BubbleNip {
   leftCenter,
   topRight,
   topLeft,
+  bottomRight,
+  bottomLeft
 }
 
 /// Class BubbleEdges is an analog of EdgeInsets, but default values are null.
@@ -150,7 +152,10 @@ class BubbleClipper extends CustomClipper<Path> {
   double _nipPY;
 
   get edgeInsets {
-    if (nip == BubbleNip.topRight || nip == BubbleNip.topLeft) {
+    if (nip == BubbleNip.topRight ||
+        nip == BubbleNip.topLeft ||
+        nip == BubbleNip.bottomLeft ||
+        nip == BubbleNip.bottomRight) {
       return EdgeInsets.only(
         left: padding.left,
         top: padding.top + _startOffset,
@@ -318,6 +323,29 @@ class BubbleClipper extends CustomClipper<Path> {
         }
         path2.close();
         return Path.combine(PathOperation.union, path1, path2);
+      case BubbleNip.bottomLeft:
+        Path path1 = Path();
+        path1.addRRect(RRect.fromLTRBR(
+            0, _startOffset, size.width, size.height - _endOffset, radius));
+
+        Path path2 = Path();
+        path2.moveTo(0, 100);
+        // print(
+        //     ' _endOffset - $_endOffset _startOffset - $_startOffset radiusY - $radiusY radiusX - $radiusX size.height - ${size.height} nipOffset - $nipOffset nipHeight - $nipHeight _nipPX - $_nipPX _nipPY - $_nipPY _nipCX - $_nipCX');
+        path2.lineTo(
+            radiusX, size.height - nipOffset - _startOffset - nipHeight);
+        path2.lineTo(9, size.height - nipOffset - _startOffset - nipHeight);
+        if (nipRadius == 0) {
+          path2.lineTo(0, size.height - nipOffset);
+        } else {
+          path2.lineTo(nipOffset + _nipPY, size.height);
+          path2.arcToPoint(Offset(nipOffset, size.height + _nipCY - 2),
+              radius: Radius.circular(nipRadius),
+              clockwise: true,
+              largeArc: false);
+        }
+        path2.close();
+        return Path.combine(PathOperation.union, path1, path2);
 
       case BubbleNip.rightBottom:
         Path path1 = Path();
@@ -337,6 +365,30 @@ class BubbleClipper extends CustomClipper<Path> {
           path2.lineTo(size.width - _nipPX, size.height - nipOffset - _nipPY);
           path2.arcToPoint(Offset(size.width - _nipCX, size.height - nipOffset),
               radius: Radius.circular(nipRadius));
+        }
+        path2.close();
+        return Path.combine(PathOperation.union, path1, path2);
+      case BubbleNip.bottomRight:
+        Path path1 = Path();
+        path1.addRRect(RRect.fromLTRBR(
+            0, _startOffset, size.width, size.height - _endOffset, radius));
+
+        Path path2 = Path();
+        path2.moveTo(size.width, size.height - 40);
+        //   print(  ' _endOffset - $_endOffset _startOffset - $_startOffset radiusY - $radiusY radiusX - $radiusX size.height - ${size.height} nipOffset - $nipOffset nipHeight - $nipHeight _nipPX - $_nipPX _nipPY - $_nipPY _nipCX - $_nipCX');
+        path2.lineTo(size.width - radiusX,
+            size.height - nipOffset - _startOffset - nipHeight);
+        path2.lineTo(size.width - 20,
+            size.height - nipOffset - _startOffset - nipHeight);
+
+        if (nipRadius == 0) {
+          path2.lineTo(size.width, size.height - nipOffset);
+        } else {
+          path2.lineTo(size.width - nipOffset - _nipPY, size.height);
+          path2.arcToPoint(Offset(size.width, size.height + _nipCY - 2),
+              radius: Radius.circular(nipRadius),
+              clockwise: false,
+              largeArc: false);
         }
         path2.close();
         return Path.combine(PathOperation.union, path1, path2);
